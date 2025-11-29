@@ -12,8 +12,12 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
+        origin: [
+            "http://localhost:5173",
+            "https://word-crush-game-vert.vercel.app"
+        ],
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
 
