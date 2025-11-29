@@ -10,6 +10,24 @@ const Admin = () => {
     const [qrCodeUrl, setQrCodeUrl] = useState('');
 
     useEffect(() => {
+        if (!socket) return;
+
+        socket.on('gameState', (state) => {
+            setGameState(state);
+        });
+
+        // Generate QR code using the current Vercel URL
+        const url = `${window.location.protocol}//${window.location.host}`;
+        QRCode.toDataURL(url)
+            .then(url => setQrCodeUrl(url))
+            .catch(err => console.error(err));
+
+        return () => {
+            socket.off('gameState');
+        };
+    }, [socket]);
+
+    useEffect(() => {
         if (socket) {
             socket.emit('requestState');
         }
