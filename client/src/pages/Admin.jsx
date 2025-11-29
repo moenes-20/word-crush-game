@@ -10,27 +10,6 @@ const Admin = () => {
     const [qrCodeUrl, setQrCodeUrl] = useState('');
 
     useEffect(() => {
-        if (!socket) return;
-
-        socket.on('gameState', (state) => {
-            setGameState(state);
-
-            // Use the IP provided by the server for the QR code
-            if (state.serverIp) {
-                const port = window.location.port;
-                const url = `${window.location.protocol}//${state.serverIp}:${port}`;
-                QRCode.toDataURL(url)
-                    .then(url => setQrCodeUrl(url))
-                    .catch(err => console.error(err));
-            }
-        });
-
-        return () => {
-            socket.off('gameState');
-        };
-    }, [socket]);
-
-    useEffect(() => {
         if (socket) {
             socket.emit('requestState');
         }
